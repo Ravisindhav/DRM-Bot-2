@@ -286,9 +286,9 @@ class download_handler(Download_Methods):
         return file_path
 
     async def start_download(self):
-        YTF = f"bv[height<=?{self.Q}]+ba/[height<=?{self.Q}]+ba/[height>=?{self.Q}]+ba/[height<=?{self.Q}]/[height>=?{self.Q}]/b"
-        YTDLP = f'yt-dlp -i --no-check-certificate -f "{YTF}" --no-warning "{self.url}" --merge-output-format mp4 --remux-video mp4 -o "{self.temp_dir}.%(ext)s"'
-        CMD = f"{YTDLP} -R 25 --fragment-retries 25 --external-downloader aria2c --downloader-args 'aria2c: -x 16 -j 32'"
+        headers = '--add-header "Referer: https://web.classplusapp.com" --add-header "User-Agent: Mozilla/5.0"'
+YTDLP = f'yt-dlp -i --no-check-certificate {headers} -f "{YTF}" --no-warning "{self.url}" --merge-output-format mp4 --remux-video mp4 -o "{self.temp_dir}.%(ext)s"'
+CMD = f"{YTDLP} -R 25 --fragment-retries 25 --external-downloader aria2c --downloader-args 'aria2c: -x 16 -j 32'"
         # dl = subprocess.run(download_cmd, shell=True)
 
         if self.url.startswith('https://elearn.crwilladmin.com/') and self.url.endswith('.pdf'):
