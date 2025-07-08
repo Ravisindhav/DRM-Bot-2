@@ -39,8 +39,12 @@ error_list = []
 )
 async def Pro(bot: AFK, m: Message):
     sPath = f"{Config.DOWNLOAD_LOCATION}/{m.chat.id}"
-    tPath =  f"{Config.DOWNLOAD_LOCATION}/FILE/{m.chat.id}"#f"{Config.DOWNLOAD_LOCATION}/FILE/{m.chat.id}"
+    tPath = f"{Config.DOWNLOAD_LOCATION}/FILE/{m.chat.id}"
+    
+    # ✅ Create download folders if not exist
     os.makedirs(sPath, exist_ok=True)
+    os.makedirs(os.path.dirname(tPath), exist_ok=True)
+
     BOT = TgClient(bot, m, sPath)
     try:
         nameLinks, num, caption, quality, Token, txt_name, userr = await BOT.Ask_user()
@@ -74,7 +78,7 @@ async def Pro(bot: AFK, m: Message):
                                   path=sPath, Token=Token, Quality=quality)
             dl_file = await DL.start_download()
 
-            if os.path.isfile(dl_file) is not None:
+            if dl_file and os.path.isfile(dl_file):
                 if dl_file.endswith(".mp4"):
                     cap = f"{caption_name}.mp4\n\n<b>𝗕𝗮𝘁𝗰𝗵 𝗡𝗮𝗺𝗲 : </b>{caption}\n\n<b>𝗘𝘅𝘁𝗿𝗮𝗰𝘁𝗲𝗱 𝗯𝘆 ➤ </b> **{userr}**"
                     UL = Upload_to_Tg(bot=bot, m=m, file_path=dl_file, name=caption_name,
