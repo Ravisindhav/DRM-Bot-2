@@ -37,7 +37,7 @@ class get_link_atributes:
             return widthXheight
 
     @staticmethod
-def get_height_width(link: str, Q: str):
+    def get_height_width(link: str, Q: str):
     url = get_link_atributes().input_url(link=link, Q=Q)
     YTF = f"bv[height<=?{Q}]+ba/[height<=?{Q}]+ba/[height>=?{Q}]+ba/[height<=?{Q}]/[height>=?{Q}]/b"
     headers = '--add-header "Referer: https://web.classplusapp.com" --add-header "User-Agent: Mozilla/5.0"'
