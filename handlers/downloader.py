@@ -285,7 +285,6 @@ class download_handler(Download_Methods):
         return file_path
 
     async def start_download(self):
-        async def start_download(self):
         YTF = f"bv[height<=?{self.Q}]+ba/[height<=?{self.Q}]+ba/[height>=?{self.Q}]+ba/[height<=?{self.Q}]/[height>=?{self.Q}]/b"
 
         # Example shell command (commented out)
