@@ -40,23 +40,18 @@ class get_link_atributes:
     def get_height_width(link: str, Q: str):
         url = get_link_atributes().input_url(link=link, Q=Q)
         YTF = f"bv[height<=?{Q}]+ba/[height<=?{Q}]+ba/[height>=?{Q}]+ba/[height<=?{Q}]/[height>=?{Q}]/b"
-        if link.endswith("ankul60"):
-            url = ParseLink.topranker_link(link)
-            if "m3u8" in url:
-                rout = ParseLink.rout(url=link, m3u8=url)
-                os.system(f'curl "{rout}" -c "cooks.txt"')
-                cook = "cooks.txt"
-                YTDLP = f'yt-dlp -i --no-check-certificate -f "{YTF}" --no-warning "{url}" --cookies "{cook}" -o "%(resolution)s"'
-                wXh = get_link_atributes().get_wxh(YTDLP)
-                return wXh
-            elif "youtu" in url:
-                YTDLP = f'yt-dlp -i --no-check-certificate -f "{YTF}" --no-warning "{url}" --progress -o "%(resolution)s"'
-                wXh = get_link_atributes().get_wxh(YTDLP)
-                return wXh
-        else:
-            YTDLP = f'yt-dlp -i --no-check-certificate -f "{YTF}" --no-warning "{url}" --progress --remux-video mp4 -o "%(resolution)s"'
-            wXh = get_link_atributes().get_wxh(YTDLP)
-            return wXh
+        headers = '--add-header "Referer: https://web.classplusapp.com" --add-header "User-Agent: Mozilla/5.0"'
+
+        # ✅ Step 1: Save cookies using curl
+        os.system(f'curl "{url}" -c "cooks.txt"')
+        cook = "cooks.txt"
+
+        # ✅ Step 2: Use cookies in yt-dlp command
+        YTDLP = f'yt-dlp -i --no-check-certificate {headers} -f "{YTF}" --no-warning "{url}" --cookies "{cook}" -o "%(resolution)s.%(ext)s"'
+
+        # ✅ Step 3: Get resolution
+        wXh = get_link_atributes().get_wxh(YTDLP)
+        return wXh
 
     @staticmethod
     def input_url(link: str, Q: str):
