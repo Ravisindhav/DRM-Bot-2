@@ -1,14 +1,14 @@
 import os
-from pyrogram import Client as AFK, idle, filters
+from pyrogram import Client as AFK, idle
 from pyrogram.enums import ChatMemberStatus, ChatMembersFilter
 from pyrogram import enums
-from pyrogram.types import ChatMember, Message
+from pyrogram.types import ChatMember
 import asyncio
 import logging
 import tgcrypto
 from pyromod import listen
+import logging
 from tglogging import TelegramLogHandler
-import sys
 
 # Config 
 class Config(object):
@@ -28,7 +28,7 @@ class Config(object):
 
     LOG_CH = os.environ.get("LOG_CH", "-1002761572365")
 
-# TelegramLogHandler
+# TelegramLogHandler is a custom handler which is inherited from an existing handler. ie, StreamHandler.
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
@@ -47,9 +47,10 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 LOGGER.info("live log streaming to telegram.")
 
+
 # Store
 class Store(object):
-    CPTOKEN = "your_token_here"
+    CPTOKEN = "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgzNjkyMTIsIm9yZ0lkIjoyNjA1LCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTcwODI3NzQyODkiLCJuYW1lIjoiQWNlIiwiZW1haWwiOm51bGwsImlzRmlyc3RMb2dpbiI6dHJ1ZSwiZGVmYXVsdExhbmd1YWdlIjpudWxsLCJjb3VudHJ5Q29kZSI6IklOIiwiaXNJbnRlcm5hdGlvbmFsIjowLCJpYXQiOjE2NDMyODE4NzcsImV4cCI6MTY0Mzg4NjY3N30.hM33P2ai6ivdzxPPfm01LAd4JWv-vnrSxGXqvCirCSpUfhhofpeqyeHPxtstXwe0"
     SPROUT_URL = "https://discuss.oliveboard.in/"
     ADDA_TOKEN = ""
     THUMB_URL = "https://telegra.ph/file/84870d6d89b893e59c5f0.jpg"
@@ -75,10 +76,8 @@ class Msg(object):
 # Prefixes
 prefixes = ["/", "~", "?", "!", "."]
 
-# Plugin config
+# Client
 plugins = dict(root="plugins")
-
-# Main Block
 if __name__ == "__main__":
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
@@ -92,32 +91,23 @@ if __name__ == "__main__":
         api_hash=Config.API_HASH,
         sleep_threshold=120,
         plugins=plugins,
-        workdir=f"{Config.SESSIONS}/",
-        workers=2,
+        workdir= f"{Config.SESSIONS}/",
+        workers= 2,
     )
 
-    # /stop command
-    @PRO.on_message(
-        (filters.chat(Config.GROUPS) | filters.chat(Config.AUTH_USERS)) &
-        filters.command("stop", prefixes=prefixes)
-    )
-    async def stop_command(bot: AFK, m: Message):
-        await m.reply_text("🛑 Bot stopped by admin.")
-        LOGGER.info(f"Stopped by {m.from_user.id}")
-        await bot.stop()
-        sys.exit(0)
-
-    # Start bot
     chat_id = []
     for i, j in zip(Config.GROUPS, Config.AUTH_USERS):
         chat_id.append(i)
         chat_id.append(j)
-
+    
+    
     async def main():
         await PRO.start()
+        # h = await PRO.get_chat_member(chat_id= int(-1002115046888), user_id=6695586027)
+        # print(h)
         bot_info = await PRO.get_me()
         LOGGER.info(f"<--- @{bot_info.username} Started --->")
-
+        
         for i in chat_id:
             try:
                 await PRO.send_message(chat_id=i, text="**Bot Started! ♾ /pro **")
