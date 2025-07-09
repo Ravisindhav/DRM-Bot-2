@@ -285,27 +285,33 @@ class download_handler(Download_Methods):
         return file_path
 
     async def start_download(self):
+        async def start_download(self):
         YTF = f"bv[height<=?{self.Q}]+ba/[height<=?{self.Q}]+ba/[height>=?{self.Q}]+ba/[height<=?{self.Q}]/[height>=?{self.Q}]/b"
-        yt-dlp -i --no-check-certificate \
-        --add-header "Referer: https://classplusapp.com" \
-        --add-header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" \
-        -f "bv[height<=?360]+ba/b[height<=?360]" \
-        --merge-output-format mp4 \
-        --remux-video mp4 \
-        -o "./DOWNLOADS/..." \
-        "https://media-cdn.classplusapp.com/..."
+
+        # Example shell command (commented out)
+        # yt-dlp -i --no-check-certificate \
+        # --add-header "Referer: https://classplusapp.com" \
+        # --add-header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" \
+        # -f "bv[height<=?360]+ba/b[height<=?360]" \
+        # --merge-output-format mp4 \
+        # --remux-video mp4 \
+        # -o "./DOWNLOADS/..." \
+        # "https://media-cdn.classplusapp.com/..."
+
+        file_path = f"{self.temp_dir}.mp4"
         CMD = (
-        f'{YTDLP} -i --no-check-certificate '
-        '--add-header "Referer: https://classplusapp.com" '
-        '--add-header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" '
-        f'-f "{YTF}" '
-        '--merge-output-format mp4 '
-        '--remux-video mp4 '
-        f'-o "{self.file_path}" '
-        f'"{self.url}" '
-        '-R 25 --fragment-retries 25 '
-        '--external-downloader aria2c '
-        '--downloader-args "aria2c: -x 16 -j 32"')
+            f'yt-dlp -i --no-check-certificate '
+            '--add-header "Referer: https://classplusapp.com" '
+            '--add-header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" '
+            f'-f "{YTF}" '
+            '--merge-output-format mp4 '
+            '--remux-video mp4 '
+            f'-o "{file_path}" '
+            f'"{self.url}" '
+            '-R 25 --fragment-retries 25 '
+            '--external-downloader aria2c '
+            '--downloader-args "aria2c: -x 16 -j 32"'
+        )
         # dl = subprocess.run(download_cmd, shell=True)
 
         if self.url.startswith('https://elearn.crwilladmin.com/') and self.url.endswith('.pdf'):
