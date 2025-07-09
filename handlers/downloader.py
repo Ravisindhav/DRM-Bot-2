@@ -49,9 +49,15 @@ class get_link_atributes:
         # ✅ Step 2: Use cookies in yt-dlp command
         YTDLP = f'yt-dlp -i --no-check-certificate {headers} -f "{YTF}" --no-warning "{url}" --cookies "{cook}" -o "%(resolution)s.%(ext)s"'
 
-        # ✅ Step 3: Get resolution
-        wXh = get_link_atributes().get_wxh(YTDLP)
-        return wXh
+        # ✅ Step 3: Get width x height
+        try:
+            lines = str(getoutput(f"{YTDLP} -e --get-filename -R 25")).split("\n")
+            widthXheight = lines[1].strip() if len(lines) > 1 else ".N.A"
+            LOGS.info(widthXheight)
+            return widthXheight
+        except Exception as e:
+            LOGS.info(str(e))
+            return ".N.A"
 
     @staticmethod
     def input_url(link: str, Q: str):
