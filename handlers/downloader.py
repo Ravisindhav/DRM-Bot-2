@@ -47,7 +47,7 @@ class get_link_atributes:
         cook = "cooks.txt"
 
         # ✅ Step 2: Use cookies in yt-dlp command
-        YTDLP = f'yt-dlp -i --no-check-certificate {headers} -f "{YTF}" --no-warning "{url}" --cookies "{cook}" -o "%(resolution)s.%(ext)s"'
+        YTDLP = f'yt-dlp -i --no-check-certificate --add-header "Referer: https://web.classplusapp.com" --add-header "User-Agent: Mozilla/5.0" -f "{YTF}" --no-warning "{url}" --cookies "{cook}" -o "%(resolution)s.%(ext)s"'
 
         # ✅ Step 3: Get width x height
         try:
